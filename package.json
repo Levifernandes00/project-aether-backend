@@ -1,0 +1,15 @@
+{
+  "name": "upn-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:LeviUSP/project-aether-backend.git",
+  "author": "LeviUSP <levifernandes@usp.br>",
+  "license": "MIT",
+  "dependencies": {
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.3"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^5.5.1"
+  }
+}
