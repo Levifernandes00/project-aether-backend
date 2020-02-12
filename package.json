@@ -4,5 +4,15 @@
   "main": "index.js",
   "repository": "https://github.com/LeviUSP/project-aether-backend.git",
   "author": "Levi <levifernandes@usp.br>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.8.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
 }
