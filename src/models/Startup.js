@@ -15,9 +15,11 @@ const StartupSchema = new Schema({
     },
     categories: [{
         type: String,
+        required: true,
     }],
     jobs: [{
         type: String,
+        required: true,
     }],
     responsible: [{
         type: Schema.Types.ObjectId,

@@ -1,12 +1,10 @@
 const Startup = require('../models/Startup');
-const User = require('../models/User');
 
 module.exports = {
 
     async index(req,res){
         const { user } = req.headers;
 
-        //startups with no relation with loggedUser
         const startups = await Startup.find({
             $and: [
                 { responsible:{ $not: { $all: [user] } }},
