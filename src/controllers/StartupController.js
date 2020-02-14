@@ -15,11 +15,19 @@ module.exports = {
         return res.json(startups);
     },
 
+    async getStartupByUser(req, res){
+        const { user } = req.headers;
+
+        const startups = await Startup.find({ responsible:{ $all: [user] } });
+
+        return res.json(startups);
+    },
+
     async store(req, res) {
         const { name, bio, imageURL, categories, jobs } = req.body;
         
         if(!name || !bio || !imageURL || !categories || !jobs){
-            return res.json({ message: "Informations missing" });
+            return res.json({ message: "Information missing" });
         }
         
         // const { id } = req.header;

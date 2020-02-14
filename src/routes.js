@@ -6,6 +6,7 @@ const routes = express.Router();
 
 //startups
 routes.get('/startups', StartupController.index);
+routes.get('/startupManaged', StartupController.getStartupByUser);
 
 routes.post('/startup', StartupController.store);
 routes.post('/updateStartup', StartupController.update);
