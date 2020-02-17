@@ -22,7 +22,7 @@ const StartupSchema = new Schema({
         required: true,
     }],
     responsible: [{
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: 'User'
     }],
     applies: [{

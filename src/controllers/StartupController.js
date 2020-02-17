@@ -1,14 +1,16 @@
 const Startup = require('../models/Startup');
+const User = require('../models/User');
 
 module.exports = {
 
     async index(req,res){
-        const { user } = req.headers;
+        const { userid } = req.headers;
+        const user = await User.findById(userid);
 
-        const startups = await Startup.find({
+        const startups = await Startup.find( { 
             $and: [
-                { responsible:{ $not: { $all: [user] } }},
-                { applies:{ $not: { $all: [user] } }}
+                { responsible:{ $not: { $all: [userid] } } },
+                { applies:{ $not: { $all: [user._id] } } }
             ]
         });
 
@@ -16,11 +18,20 @@ module.exports = {
     },
 
     async getStartupByUser(req, res){
-        const { user } = req.headers;
-
-        const startups = await Startup.find({ responsible:{ $all: [user] } });
+        const { userid } = req.headers;
+   
+        const startups = await Startup.find( { responsible: { $all: [userid] } } );
 
         return res.json(startups);
+    },
+
+    async getStartupByCategory(req, res){
+        const { category } = req.body;
+
+        const startups = await Startup.find( { categories: { $all: [category] } } );
+
+        return res.json(startups);
+
     },
 
     async store(req, res) {
@@ -29,8 +40,7 @@ module.exports = {
         if(!name || !bio || !imageURL || !categories || !jobs){
             return res.json({ message: "Information missing" });
         }
-        
-        // const { id } = req.header;
+
         const startupExists = await Startup.findOne({ name });
 
         if(startupExists) 
@@ -48,8 +58,8 @@ module.exports = {
     },
 
     async update(req, res) {
-        const { jobs, categories, name, imageURL, bio } = req.body;
-        const { id } = req.headers;
+        const { jobs, categories, name, imageURL, bio, responsible } = req.body;
+        const { startupId } = req.params;
         let query = {};
 
         if(jobs) 
@@ -67,8 +77,11 @@ module.exports = {
         if(bio) 
             query.bio = bio;
 
+        if(responsible) 
+            query.responsible = responsible;
 
-        const startup = await Startup.updateOne({ _id: id }, query);
+
+        const startup = await Startup.updateOne({ _id: startupId }, query);
 
         return res.json(startup);
     },
