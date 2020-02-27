@@ -55,7 +55,6 @@ module.exports = {
         const { name, email, phoneNumber, photoURL, resumeURL } = req.body;
         const { userId } = req.params;
         let query = {};
-        console.log(photoURL);
         
         if(email) 
             query.email = email;

@@ -27,7 +27,7 @@ module.exports = {
     },
 
     async getStartupByCategory(req, res){
-        const { category } = req.body;
+        const { category } = req.params;
         const { userid } = req.headers;
 
         const user = await User.findById(userid);

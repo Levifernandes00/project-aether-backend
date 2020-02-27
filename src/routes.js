@@ -8,7 +8,7 @@ const routes = express.Router();
 //startups
 routes.get('/startups', StartupController.index);
 routes.get('/startupManaged', StartupController.getStartupByUser);
-routes.get('/startupCategory', StartupController.getStartupByCategory)
+routes.get('/startup/:category', StartupController.getStartupByCategory)
 
 routes.post('/startup', StartupController.store);
 routes.post('/startup/:startupId/update', StartupController.update);
