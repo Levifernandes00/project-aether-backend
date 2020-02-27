@@ -10,11 +10,29 @@ module.exports = {
         return res.json(user);
     },
 
+    async getUserByEmail(req, res) {
+        const { email } = req.headers;
+
+        const user = await User.findOne({ email });
+
+        if(!user){
+            return res.json({ error: "user does not exists" });
+        }
+
+        return res.json(user);
+    },
+
     async store(req, res) {
         const { name, email, phoneNumber, photoURL, resumeURL } = req.body;
 
         if(!name || !email || !phoneNumber){
-            return res.json({ message: "Missing Information" });
+            if(! name) 
+                return res.status(400).json({ error: "No name" });
+            if(! email) 
+                return res.status(400).json({ error: "No email" });
+            if(! phoneNumber){
+
+            }
         }
 
         const userExists = await User.findOne({ email });
@@ -33,11 +51,11 @@ module.exports = {
         return res.json(userAdded);
     },
 
-    async update(req, res) {
+    async updateUser(req, res) {
         const { name, email, phoneNumber, photoURL, resumeURL } = req.body;
-        const { id } = req.headers;
+        const { userId } = req.params;
         let query = {};
-
+        console.log(photoURL);
         
         if(email) 
             query.email = email;
@@ -55,9 +73,9 @@ module.exports = {
             query.resumeURL = resumeURL;
 
 
-        const startup = await Startup.updateOne({ _id: id }, query);
+        const user = await User.updateOne({ _id: userId }, query);
 
-        return res.json(startup);
+        return res.json(user);
     },
 
     async getUsers(req, res) {

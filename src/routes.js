@@ -18,10 +18,11 @@ routes.post('/startup/:startupId/apply', ApplyController.apply);
 
 //users
 routes.get('/user', UserController.getUserById);
+routes.get('/userEmail', UserController.getUserByEmail);
 routes.get('/users', UserController.getUsers);
 
 routes.post('/user', UserController.store);
-routes.post('/updateUser', UserController.update);
+routes.post('/user/:userId/update', UserController.updateUser);
 
 
 

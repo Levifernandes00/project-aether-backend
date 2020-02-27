@@ -19,7 +19,6 @@ const StartupSchema = new Schema({
     }],
     jobs: [{
         type: String,
-        required: true,
     }],
     responsible: [{
         type: String,

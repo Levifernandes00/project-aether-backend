@@ -6,11 +6,12 @@ module.exports = {
     async index(req,res){
         const { userid } = req.headers;
         const user = await User.findById(userid);
-
+       
         const startups = await Startup.find( { 
             $and: [
                 { responsible:{ $not: { $all: [userid] } } },
-                { applies:{ $not: { $all: [user._id] } } }
+                { applies:{ $not: { $all: [user._id] } } },
+                { jobs: { $exists: true, $not: {$size: 0} } }
             ]
         });
 
@@ -27,31 +28,41 @@ module.exports = {
 
     async getStartupByCategory(req, res){
         const { category } = req.body;
+        const { userid } = req.headers;
 
-        const startups = await Startup.find( { categories: { $all: [category] } } );
+        const user = await User.findById(userid);
+
+        const startups = await Startup.find( { 
+            $and: [
+                { responsible:{ $not: { $all: [userid] } } },
+                { applies:{ $not: { $all: [user._id] } } },
+                { jobs: { $exists: true, $not: {$size: 0} } },
+                { categories: { $all: [category] } }
+            ]
+        });
 
         return res.json(startups);
-
     },
 
     async store(req, res) {
-        const { name, bio, imageURL, categories, jobs } = req.body;
+        const { name, bio, imageURL, responsible, categories, jobs } = req.body;
         
-        if(!name || !bio || !imageURL || !categories || !jobs){
-            return res.json({ message: "Information missing" });
+        if(!name || !bio || !imageURL || !categories){
+            return res.json({ error: "Information missing" });
         }
 
         const startupExists = await Startup.findOne({ name });
 
         if(startupExists) 
-            res.json({ message: "Startup already exists" });
+            res.status(400).json({ error: "Startup already exists" });
 
         const startup = await Startup.create({
             name,
             bio, 
             imageURL,
             categories,
-            jobs
+            jobs,
+            responsible,
         })
         
         return res.json(startup);
