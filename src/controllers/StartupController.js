@@ -44,6 +44,30 @@ module.exports = {
         return res.json(startups);
     },
 
+    async getStartupBySearch(req, res){
+        const { search } = req.params;
+        const { userid } = req.headers;
+        
+        const user = await User.findById(userid);
+
+        const startups = await Startup.find( { 
+            $and: [
+                { responsible:{ $not: { $all: [userid] } } },
+                { applies:{ $not: { $all: [user._id] } } },
+                { jobs: { $exists: true, $not: {$size: 0} } },
+                { $or: [
+                    { categories: { $all: [new RegExp(search)] } },
+                    { jobs: { $all: [new RegExp(search)] } },
+                    { name: new RegExp(search) }
+                ]}
+            ]
+            
+            
+        });
+
+        return res.json(startups);
+    },
+
     async store(req, res) {
         const { name, bio, imageURL, responsible, categories, jobs } = req.body;
         
